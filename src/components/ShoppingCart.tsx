@@ -13,7 +13,6 @@ export function ShoppingCart() {
 		(state: RootState) => state.shoppingCart.cartItems
 	);
 	const isOpen = useSelector((state: RootState) => state.shoppingCart.isOpen);
-	console.log("isOpen: ", isOpen);
 
 	return (
 		<Offcanvas
