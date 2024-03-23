@@ -1,5 +1,12 @@
 import { Button, Card } from "react-bootstrap";
-import { useShoppingCart } from "../context/ShoppingCartContext";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import {
+	decreaseCartQuantity,
+	increaseCartQuantity,
+	removeFromCart,
+} from "../store/reducers/shoppingCartSlice";
+import { CartItem } from "../types/shoppingCart.types";
 import { formatCurrency } from "../utilities/formatCurrency";
 
 type StoreItemProps = {
@@ -10,13 +17,12 @@ type StoreItemProps = {
 };
 
 export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
-	const {
-		getItemQuantity,
-		increaseCartQuantity,
-		decreaseCartQuantity,
-		removeFromCart,
-	} = useShoppingCart();
-	const quantity = getItemQuantity(id);
+	const dispatch = useDispatch();
+	const cartItems = useSelector(
+		(state: RootState) => state.shoppingCart.cartItems
+	);
+	const quantity =
+		cartItems.find((item: CartItem) => item.id === id)?.quantity || 0;
 
 	return (
 		<Card className="h-100">
@@ -33,7 +39,10 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
 				</Card.Title>
 				<div className="mt-auto">
 					{quantity === 0 ? (
-						<Button className="w-100" onClick={() => increaseCartQuantity(id)}>
+						<Button
+							className="w-100"
+							onClick={() => dispatch(increaseCartQuantity(id))}
+						>
 							+ Add To Cart
 						</Button>
 					) : (
@@ -45,16 +54,20 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
 								className="d-flex align-items-center justify-content-center"
 								style={{ gap: ".5rem" }}
 							>
-								<Button onClick={() => decreaseCartQuantity(id)}>-</Button>
+								<Button onClick={() => dispatch(decreaseCartQuantity(id))}>
+									-
+								</Button>
 								<div>
 									<span className="fs-3">{quantity}</span> in cart
 								</div>
-								<Button onClick={() => increaseCartQuantity(id)}>+</Button>
+								<Button onClick={() => dispatch(increaseCartQuantity(id))}>
+									+
+								</Button>
 							</div>
 							<Button
 								variant="danger"
 								size="sm"
-								onClick={() => removeFromCart(id)}
+								onClick={() => dispatch(removeFromCart(id))}
 							>
 								Remove
 							</Button>

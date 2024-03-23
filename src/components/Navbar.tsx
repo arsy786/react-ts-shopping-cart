@@ -1,9 +1,19 @@
 import { Button, Container, Nav, Navbar as NavbarBs } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { useShoppingCart } from "../context/ShoppingCartContext";
+import { RootState } from "../store";
+import { openCart } from "../store/reducers/shoppingCartSlice";
+import { CartItem } from "../types/shoppingCart.types";
 
 export function Navbar() {
-	const { openCart, closeCart, cartQuantity } = useShoppingCart();
+	const dispatch = useDispatch();
+	const cartItems = useSelector(
+		(state: RootState) => state.shoppingCart.cartItems
+	);
+	const cartQuantity = cartItems.reduce(
+		(total: number, item: CartItem) => total + item.quantity,
+		0
+	);
 
 	return (
 		<NavbarBs sticky="top" className="bg-white shadow-sm mb-3">
@@ -21,7 +31,7 @@ export function Navbar() {
 				</Nav>
 				{cartQuantity > 0 && (
 					<Button
-						onClick={openCart}
+						onClick={() => dispatch(openCart())}
 						style={{ width: "3rem", height: "3rem", position: "relative" }}
 						variant="outline-primary"
 						className="rounded-circle"
