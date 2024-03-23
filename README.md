@@ -21,3 +21,12 @@ To install and run the project on your local machine, follow these steps:
 3. Run the command `npm install` to install the required dependencies
 4. Run the command `npm start` to start the development server
 5. Open your web browser and navigate to http://localhost:3000 to view the application
+
+## Branch Information
+
+The project includes two branches showcasing different state management approaches:
+
+- `react-context`: Utilizes React Context for state management.
+- `redux-toolkit`: Implements Redux Toolkit for state management.
+
+Switch between branches using `git checkout branch-name` to explore the different implementations.
